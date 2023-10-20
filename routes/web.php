@@ -30,8 +30,26 @@ Route::middleware('auth')->group(function () {
 });
 
 //Routing untuk fitur post
-Route::get('/post', [PostController::class, 'tampil'])->name('post.tampil');
-Route::post('/post', [PostController::class, 'simpan'])->name('post.simpan');
+Route::middleware(['auth', 'verified'])->group(function () {
+
+    // read data
+    Route::get('/post', [PostController::class, 'tampil'])->name('post.tampil');
+    
+    // menampilkan form tambah data
+    Route::get('/post/create', [PostController::class, 'tambah'])->name('post.tambah');
+
+    // menyimpan data
+    Route::post('/post', [PostController::class, 'simpan'])->name('post.simpan');
+
+    // menampilkan form edit data
+    Route::get('/post/{id}/edit', [PostController::class, 'edit'])->name('post.edit');
+
+    // update data
+    Route::put('/post/{id}', [PostController::class, 'update'])->name('post.update');
+
+    // delete data
+    Route::delete('/post/{id}', [PostController::class, 'hapus'])->name('post.hapus');
+});
 
 
 require __DIR__.'/auth.php';
